@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import urllib2
+import html2text
 
 from smart_open import smart_open
 
@@ -33,16 +34,21 @@ class TaxonomieWriter:
         self._file = smart_open(name, 'w')
 
     def page(self, page, content):
-        if page is not None and page != "":
-            	if check(content["topic"]):
-			directory = "./" + content["topic"] 
+        h = html2text.HTML2Text()
+	h.ignore_links = True
+
+	if page is not None and page != "":
+            	topic = content ['topic']
+		print topic
+		if self.checkTopic(topic):
+			directory = "./" + topic 
 			if not os.path.exists(directory):
 				os.makedirs(directory)
 			try:
 				response = urllib2.urlopen(page)
 				htmlContent = response.read()
 				f = open (directory + "/" + content["d:Title"] + ".txt", 'w')
-				f.write(htmlContent)
+				f.write(h.handle(htmlContent))
 				f.close()
 			except Exception as e:
 				logger.info("Skipping page %s, Error: %e", page)
@@ -52,12 +58,12 @@ class TaxonomieWriter:
             logger.info("Skipping page %s, page attribute is missing", page)
 
 
-    def checkTopic(topic):
+    def checkTopic(self, topic):
 	topics = ["Top/Computers","Top/Science", "Top/World/Deutsch/Computer", "Top/World/Deutsch/Wissenschaft"]
-	match = false
+	match = False
 	for t in topics:
 		if t in topic:
-			match = true
+			match = True
 	
 	return match
 
