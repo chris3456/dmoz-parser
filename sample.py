@@ -2,7 +2,10 @@
 
 from parser import DmozParser
 from handlers import JSONWriter
+from handlers import TaxonomieWriter
+
 
 parser = DmozParser()
-parser.add_handler(JSONWriter('output.json'))
+parser.input_path = '../content.rdf.u8.gz'
+parser.add_handler(TaxonomieWriter('output.json'))
 parser.run()
