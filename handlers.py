@@ -39,21 +39,23 @@ class TaxonomieWriter:
 
 	if page is not None and page != "":
             	topic = content ['topic']
-		print topic
 		if self.checkTopic(topic):
 			directory = "./" + topic 
 			if not os.path.exists(directory):
 				os.makedirs(directory)
 			try:
-				response = urllib2.urlopen(page)
-				htmlContent = response.read()
-				f = open (directory + "/" + content["d:Title"] + ".txt", 'w')
-				f.write(h.handle(htmlContent))
-				f.close()
+				file_path = directory + "/" + content["d:Title"] + ".txt"
+				if not os.path.exists(file_path):
+					response = urllib2.urlopen(page, timeout=10)
+					htmlContent = response.read()
+					f = open (file_path, 'w')
+					f.write(h.handle(htmlContent))
+					f.close()
+					logging.info("Downloaded: %s", page)
 			except Exception as e:
-				logger.info("Skipping page %s, Error: %e", page)
+				logger.warn("Skipping page %s, Error: %s", page, e)
 	    	else:
-			logger.info("Skipping page %s, wrong topic", page)	
+			logger.info("Skipping topic %s", topic)	
         else:
             logger.info("Skipping page %s, page attribute is missing", page)
 
@@ -64,6 +66,7 @@ class TaxonomieWriter:
 	for t in topics:
 		if t in topic:
 			match = True
+			break
 	
 	return match
 
