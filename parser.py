@@ -15,7 +15,7 @@ import logging
 
 from smart_open import smart_open
 
-from handlers import JSONWriter, CSVWriter
+from handlers import JSONWriter, TaxonimieWriter
 
 logger = logging.getLogger(__name__)
 
@@ -100,10 +100,8 @@ if __name__ == '__main__':
 
     if file_extension == ".json":
         parser.add_handler(JSONWriter(output_path))
-    elif file_extension == ".csv":
-        parser.add_handler(CSVWriter(output_path))
     else:
-        logger.info("Only .json or .csv output files are supported.")
+        logger.info("Only .json output file is supported.")
         sys.exit(1)
     parser.run()
 
