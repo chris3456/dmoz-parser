@@ -56,8 +56,7 @@ example: `python parser.py ./data/content.rdf.u8 ./data/parsed.json`
 
 Built-in handlers
 -----------------
-There are two builtin handlers so far - _JSONWriter_ and _CSVWriter_.
-_CSVWriter_ is buggy (see "handler.py" to understand why), and we recommend the _JSONWriter_.
+There are two builtin handlers so far - _JSONWriter_ and _TaxonomieWriter_.
 
 Handlers
 --------
